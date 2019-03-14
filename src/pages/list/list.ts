@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, ModalController, Platform, NavParams } from 'ionic-angular';
+import { Api } from '../../providers/api/api';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-list',
@@ -10,7 +12,24 @@ export class ListPage {
   icons: string[];
   items: Array<{title: string, note: string, chofer: string , icon: string}>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public api: Api, public platform: Platform) {
+
+    //constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public api: Api, public platform: Platform) {
+    //console.log(this.platform);
+    // public storage: Storage,
+    /*this.platform.ready().then( () => {
+			this.geolocation.getCurrentPosition().then( resp => {});
+			setTimeout(() => {
+				this.loadMarks('');
+				this.user = this.api.userData;
+			},200);
+    });*/
+    //Pruebas para constructor de listar 
+    
+
+
+
+    
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
 
@@ -28,6 +47,7 @@ export class ListPage {
       });
     }
   }
+
 
   itemTapped(event, item) {
     // That's right, we're pushing to ourselves!

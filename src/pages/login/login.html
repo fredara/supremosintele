@@ -1,10 +1,10 @@
 <ion-content padding>
-	<img src="assets/logoblack.png" alt="logo" class="logo">
-	<h3 class="text-center">Distribuidor</h3>
+	<img src="assets/imgs/logo.png" alt="logo" class="logo">
+	<!--<h3 class="text-center">Supremos Taxi Express</h3>-->
 	<form (ngSubmit)="signIn()">
 		<ion-list>
 			<ion-item>
-				<ion-label color="wh" floating>Correo:</ion-label>
+				<ion-label color="wh" floating>Usuario:</ion-label>
 	    		<ion-input [(ngModel)]="data.username" name="username" type="email"></ion-input>
 			</ion-item>
 			<ion-item>
@@ -12,7 +12,7 @@
 	    		<ion-input [(ngModel)]="data.password" name="password" type="password"></ion-input>
 			</ion-item>
 			<ion-item>
-				<button [disabled]="data.username === '' || data.password === ''" color="secondary" ion-button full>Entrar</button>
+				<button [disabled]="data.username === '' || data.password === ''" color="blue" ion-button full>Entrar</button>
 			</ion-item>
 		</ion-list>
 	</form>

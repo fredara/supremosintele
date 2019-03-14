@@ -3,9 +3,10 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { LoadingController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { AppSettings } from '../../app/app.settings';
+import { Storage } from '@ionic/storage';
 
 @Injectable()
-export class LoginProvider {
+export class Api {
 	headers: any = new Headers({
 		'Content-Type': 'application/json'
 	});
@@ -14,58 +15,57 @@ export class LoginProvider {
 	});
 	preloader: any;
 
-	constructor(public http: Http, public loading: LoadingController) {}
+	userData: any  = {
+		nombre_distribuidor : '',
+		apellido_distribuidor : '',
+		correo_distribuidor : '',
+		last_login : ''
+	};;
+
+	constructor(public http: Http, public loading: LoadingController, public storage: Storage) {
+		this.storage.get('userData').then( data => {
+			this.userData = data.body;
+		}, err => console.log(err));
+	}
 
 	showLoading(){
 		this.preloader = this.loading.create({
 			content: 'Por favor espere...'
 		});
-		
+
 		this.preloader.present();
 	}
 
-	signIn(data, showLoading = false){
-		if(showLoading)
+	get(url, action, ShowLoading = false){
+		if(ShowLoading)
 			this.showLoading();
 
 		return new Promise<any>(resolve => {
-			this.http.post(AppSettings.APP_API+'/login.php', data,this.options)
-//			.map(res => res.json())
-			.subscribe((data:Response) => {
-				resolve(data);
-				if(showLoading)
-					this.preloader.dismiss();
-			});
-		});
-	}
-
-	verifyToken(token, showLoading = false){
-		console.log("Aqui");
-		if(showLoading)
-			this.showLoading();
-
-		return new Promise<any>(resolve => {
-			this.http.get(AppSettings.APP_API+'/login.php'+'?token='+encodeURIComponent(token))
+			this.http.get(AppSettings.APP_API+url+'?token='+encodeURIComponent(this.userData.token)+'&action='+action)
 			.map(res => res.json())
 			.subscribe((data:Response) => {
 				console.log(data);
 				resolve(data);
-				if(showLoading)
+				if(ShowLoading)
 					this.preloader.dismiss();
 			});
-		});
+		})
+
 	}
 
-	signOut(token, showLoading = false){
-		if(showLoading)
+	post(url, body, ShowLoading = false){
+		if(ShowLoading)
 			this.showLoading();
 
+		body.token = this.userData.token;
+
 		return new Promise<any>(resolve => {
-			this.http.delete(AppSettings.APP_API+'/login.php'+'?token='+encodeURIComponent(token))
+			this.http.post(AppSettings.APP_API+url, body, this.options)
 			.map(res => res.json())
 			.subscribe((data:Response) => {
+				console.log(data);
 				resolve(data);
-				if(showLoading)
+				if(ShowLoading)
 					this.preloader.dismiss();
 			});
 		});
